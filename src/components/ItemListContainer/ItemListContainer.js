@@ -1,9 +1,31 @@
+import { useState, useEffect } from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
-import ItemCount from "../ItemCount/ItemCount";
+import ItemList from "../ItemList/ItemList";
+import discos from "../../utils/discsMock";
 import "./ItemListContainer.css";
 
 const ItemListContainer = ({ title }) => {
+  const [items, setItems] = useState([]);
+
+  const getItems = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(discos);
+      }, 2000);
+    });
+  };
+
+  useEffect(() => {
+    getItems()
+      .then((response) => {
+        setItems(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const theme = createTheme();
   theme.typography.h2 = {
     fontSize: "2rem",
@@ -28,7 +50,7 @@ const ItemListContainer = ({ title }) => {
           {title}
         </Typography>
       </ThemeProvider>
-      <ItemCount stock={5} initial={1} />
+      <ItemList items={items} />
     </>
   );
 };
