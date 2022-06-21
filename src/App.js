@@ -1,6 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import NavBar from "./components/NavBar/NavBar";
-import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
+// import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
+import ItemDetailContainer from "./components/ItemDetailContainer/ItemDetailContainer";
 
 function App() {
   const darkTheme = createTheme({
@@ -12,7 +13,8 @@ function App() {
   return (
     <ThemeProvider theme={darkTheme}>
       <NavBar />
-      <ItemListContainer title={"Destacados"} />
+      <ItemDetailContainer />
+      {/* <ItemListContainer title={"Destacados"} /> */}
     </ThemeProvider>
   );
 }

@@ -18,17 +18,17 @@ const ItemCount = ({ stock, initial }) => {
             disabled={count === 0}
             variant="text"
             color="inherit"
+            sx={{ fontSize: "1.5rem" }}
           >
             -
           </Button>
-          <Typography variant="button" my={1}>
-            {count}
-          </Typography>
+          <Typography variant="h6">{count}</Typography>
           <Button
             onClick={() => setCount(count + 1)}
             disabled={count >= stock}
             variant="text"
             color="inherit"
+            sx={{ fontSize: "1.5rem" }}
           >
             +
           </Button>
