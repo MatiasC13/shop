@@ -13,7 +13,7 @@ const ItemDetail = ({
     >
       <Grid container alignItems="center" spacing={5}>
         <Grid item className="grid-img" xs={12} md={6}>
-          <img src={`./img/${imagen}`} alt="" className="img-detail" />
+          <img src={`/img/${imagen}`} alt="" className="img-detail" />
         </Grid>
         <Grid item xs={12} md={6}>
           <Typography

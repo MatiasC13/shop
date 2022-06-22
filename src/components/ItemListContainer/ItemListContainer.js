@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import ItemList from "../ItemList/ItemList";
@@ -6,10 +7,12 @@ import discos from "../../utils/discsMock";
 import "./ItemListContainer.css";
 
 const ItemListContainer = ({ title }) => {
+  const navigate = useNavigate();
+  const { categoria } = useParams();
   const [items, setItems] = useState([]);
 
   const getItems = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         resolve(discos);
       }, 2000);
@@ -19,12 +22,37 @@ const ItemListContainer = ({ title }) => {
   useEffect(() => {
     getItems()
       .then((response) => {
-        setItems(response);
+        if (categoria) {
+          const filterByCategory = response.filter(
+            (item) => item.categoria === categoria
+          );
+          // filterByCategory === undefined ? navigate("/notFound") : setItems(filterByCategory);
+          setItems(filterByCategory);
+        } else {
+          setItems(response);
+        }
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [categoria]);
+
+  // useEffect(() => {
+  //   getItems()
+  //     .then((response) => {
+  //       if (categoria) {
+  //         const filterByCategory = response.filter(
+  //           (item) => item.categoria === categoria
+  //         );
+  //         setItems(filterByCategory);
+  //       } else {
+  //         setItems(response);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [categoria]);
 
   const theme = createTheme();
   theme.typography.h2 = {

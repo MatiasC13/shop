@@ -7,3 +7,8 @@
   left: 40px !important;
   transform-origin: 0px 0px;
 }
+
+.menuItem-link {
+  color: white;
+  text-decoration: none;
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import "./MenuCategories.css";
+import { Link } from "react-router-dom";
 import { Button, Menu, MenuItem } from "@mui/material";
+import "./MenuCategories.css";
 
 const MenuCategories = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -29,6 +30,7 @@ const MenuCategories = () => {
         // style={{ backgroundColor: "transparent" }}
         variant="text"
         color="inherit"
+        className="menuItem-link"
       >
         Categorías
       </Button>
@@ -45,7 +47,9 @@ const MenuCategories = () => {
         {categories.map((cat, i) => {
           return (
             <MenuItem key={i} onClick={handleClose}>
-              {cat}
+              <Link to={`/categorias/${cat}`} className="menuItem-link">
+                {cat}
+              </Link>
             </MenuItem>
           );
         })}

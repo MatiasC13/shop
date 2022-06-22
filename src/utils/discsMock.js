@@ -188,16 +188,4 @@ const discos = [
   },
 ];
 
-const disco = {
-  id: 20,
-  imagen: "Angst.jpg",
-  titulo: "Angst",
-  artista: "Lacrimosa",
-  discografica: "Hall of Sermon",
-  anio: 1991,
-  copias: 10,
-  precio: 100,
-};
-export { disco };
-
 export default discos;
