@@ -15,3 +15,12 @@
   display: flex;
   justify-content: space-between;
 }
+
+.item-detail-button {
+  width: 100%;
+}
+
+.item-detail-link {
+  text-decoration: none;
+  color: #000000;
+}

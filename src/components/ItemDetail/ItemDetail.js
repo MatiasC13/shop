@@ -1,10 +1,14 @@
-import { Box, Grid, Typography } from "@mui/material";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Box, Grid, Typography, Button } from "@mui/material";
 import ItemCount from "../ItemCount/ItemCount";
 import "./ItemDetail.css";
 
 const ItemDetail = ({
   item: { imagen, titulo, artista, discografica, anio, copias, precio },
 }) => {
+  const [onAdd, setOnAdd] = useState(false);
+
   return (
     <Box
       sx={{
@@ -42,7 +46,20 @@ const ItemDetail = ({
               </Typography>
             </Box>
           </Box>
-          <ItemCount stock={copias} initial={1} />
+          {!onAdd ? (
+            <ItemCount setOnAdd={setOnAdd} stock={copias} initial={1} />
+          ) : (
+            <Button
+              variant="outlined"
+              color="inherit"
+              size="large"
+              className="item-detail-button"
+            >
+              <Link to="/cart" className="item-detail-link">
+                Comprar
+              </Link>
+            </Button>
+          )}
         </Grid>
       </Grid>
     </Box>
