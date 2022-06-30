@@ -1,7 +1,7 @@
 import ItemListContainer from "../components/ItemListContainer/ItemListContainer";
 
 const Categories = () => {
-  return <ItemListContainer title={"Lista de Productos"} />;
+  return <ItemListContainer slider={false} />;
 };
 
 export default Categories;

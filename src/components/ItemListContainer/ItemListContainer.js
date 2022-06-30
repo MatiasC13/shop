@@ -6,8 +6,8 @@ import ItemList from "../ItemList/ItemList";
 import discos from "../../utils/discsMock";
 import "./ItemListContainer.css";
 
-const ItemListContainer = ({ title }) => {
-  // const navigate = useNavigate();
+const ItemListContainer = ({ slider }) => {
+  const navigate = useNavigate();
   const { categoria } = useParams();
   const [items, setItems] = useState([]);
 
@@ -26,7 +26,11 @@ const ItemListContainer = ({ title }) => {
           const filterByCategory = response.filter(
             (item) => item.categoria === categoria
           );
-          // filterByCategory === undefined ? navigate("/notFound") : setItems(filterByCategory);
+          console.log("filtrado por categoria");
+          console.log(filterByCategory);
+          filterByCategory.length === 0
+            ? navigate("/notFound")
+            : setItems(filterByCategory);
           setItems(filterByCategory);
         } else {
           setItems(response);
@@ -35,7 +39,7 @@ const ItemListContainer = ({ title }) => {
       .catch((error) => {
         console.log(error);
       });
-  }, [categoria]);
+  }, [categoria, navigate]);
 
   // useEffect(() => {
   //   getItems()
@@ -53,6 +57,18 @@ const ItemListContainer = ({ title }) => {
   //       console.log(error);
   //     });
   // }, [categoria]);
+
+  const assignamentTitle = () => {
+    let title = "";
+    if (categoria === "LP") {
+      title = "LP";
+    } else if (categoria === "EP") {
+      title = "EP";
+    } else {
+      title = "Destacados";
+    }
+    return title;
+  };
 
   const theme = createTheme();
   theme.typography.h2 = {
@@ -75,10 +91,10 @@ const ItemListContainer = ({ title }) => {
           mt={2}
           mb={4}
         >
-          {title}
+          {assignamentTitle()}
         </Typography>
       </ThemeProvider>
-      <ItemList items={items} />
+      <ItemList items={items} slider={slider} />
     </>
   );
 };
