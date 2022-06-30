@@ -7,7 +7,7 @@ import discos from "../../utils/discsMock";
 import "./ItemListContainer.css";
 
 const ItemListContainer = ({ title }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { categoria } = useParams();
   const [items, setItems] = useState([]);
 

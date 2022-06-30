@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Box, Grid, Typography, Button } from "@mui/material";
+// import { CartContext } from "../../context/CartContext";
 import ItemCount from "../ItemCount/ItemCount";
 import "./ItemDetail.css";
 
-const ItemDetail = ({
-  item: { imagen, titulo, artista, discografica, anio, copias, precio },
-}) => {
+const ItemDetail = ({ item }) => {
+  console.log("ItemDeatil");
+  console.table(item);
+  const { imagen, titulo, artista, discografica, anio, copias, precio } = item;
+
+  // const { addItem } = useContext(CartContext);
   const [onAdd, setOnAdd] = useState(false);
+  // console.log(id, imagen, titulo, artista, discografica, anio, copias, precio);
 
   return (
     <Box
@@ -47,9 +52,15 @@ const ItemDetail = ({
             </Box>
           </Box>
           {!onAdd ? (
-            <ItemCount setOnAdd={setOnAdd} stock={copias} initial={1} />
+            <ItemCount
+              setOnAdd={setOnAdd}
+              item={item}
+              stock={copias}
+              initial={1}
+            />
           ) : (
             <Button
+              // onClick={setOnAdd}
               variant="outlined"
               color="inherit"
               size="large"
