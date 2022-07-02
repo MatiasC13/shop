@@ -1,18 +1,22 @@
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Box, Grid, Typography, Button } from "@mui/material";
-// import { CartContext } from "../../context/CartContext";
+import { CartContext } from "../../context/CartContext";
 import ItemCount from "../ItemCount/ItemCount";
 import "./ItemDetail.css";
 
 const ItemDetail = ({ item }) => {
-  console.log("ItemDeatil");
-  console.table(item);
   const { imagen, titulo, artista, discografica, anio, copias, precio } = item;
-
-  // const { addItem } = useContext(CartContext);
+  const { setCartListItems } = useContext(CartContext);
+  const [count, setCount] = useState(1);
   const [onAdd, setOnAdd] = useState(false);
-  // console.log(id, imagen, titulo, artista, discografica, anio, copias, precio);
+
+  const handlerPurchased = () => {
+    const itemPurchased = { ...item, quantity: count };
+    console.log("hanfler purchased: ", itemPurchased);
+    // itemPurchased.quantity = count;
+    setCartListItems((oldList) => [...oldList, itemPurchased]);
+  };
 
   return (
     <Box
@@ -53,10 +57,12 @@ const ItemDetail = ({ item }) => {
           </Box>
           {!onAdd ? (
             <ItemCount
+              count={count}
+              setCount={setCount}
               setOnAdd={setOnAdd}
               item={item}
               stock={copias}
-              initial={1}
+              // initial={1}
             />
           ) : (
             <Button
@@ -66,7 +72,11 @@ const ItemDetail = ({ item }) => {
               size="large"
               className="item-detail-button"
             >
-              <Link to="/cart" className="item-detail-link">
+              <Link
+                to="/cart"
+                onClick={handlerPurchased}
+                className="item-detail-link"
+              >
                 Comprar
               </Link>
             </Button>

@@ -7,6 +7,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 const CartWidget = () => {
   const { cartListItems, removeItem, clear } = useContext(CartContext);
+  console.table(cartListItems);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -60,26 +61,25 @@ const CartWidget = () => {
             Tu carrito está vacío
           </Typography>
         )}
-        {cartListItems.map((item, i) => {
-          const { imagen, titulo, precio } = item.item;
-          return (
-            <>
-              <MenuItem key={i} onClick={handleClose}>
-                <img src={`/img/${imagen}`} alt="" />
-                <Typography gutterBottom variant="caption">
-                  {titulo}
-                </Typography>
-                <Typography gutterBottom variant="caption">
-                  ${precio}
-                </Typography>
-                <IconButton>
-                  <DeleteOutlineOutlinedIcon onClick={() => removeItem(item)} />
-                </IconButton>
-              </MenuItem>
-              <Button onClick={() => clear()}>Vaciar Carrito</Button>
-            </>
-          );
-        })}
+        {cartListItems.map((elemento, i) => (
+          <>
+            <MenuItem key={i} onClick={handleClose}>
+              <img src={`/img/${elemento.item.imagen}`} alt="" />
+              <Typography gutterBottom variant="caption">
+                {elemento.item.titulo}
+              </Typography>
+              <Typography gutterBottom variant="caption">
+                ${elemento.item.precio}
+              </Typography>
+              <IconButton>
+                <DeleteOutlineOutlinedIcon
+                  onClick={() => removeItem(elemento)}
+                />
+              </IconButton>
+            </MenuItem>
+            <Button onClick={() => clear()}>Vaciar Carrito</Button>
+          </>
+        ))}
       </Menu>
     </>
   );

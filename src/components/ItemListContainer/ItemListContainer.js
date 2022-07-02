@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import Loader from "../Loader/Loader";
 import ItemList from "../ItemList/ItemList";
 import discos from "../../utils/discsMock";
 import "./ItemListContainer.css";
@@ -9,6 +11,7 @@ import "./ItemListContainer.css";
 const ItemListContainer = ({ slider }) => {
   const navigate = useNavigate();
   const { categoria } = useParams();
+  const { loading, setLoading } = useContext(CartContext);
   const [items, setItems] = useState([]);
 
   const getItems = () => {
@@ -20,14 +23,13 @@ const ItemListContainer = ({ slider }) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     getItems()
       .then((response) => {
         if (categoria) {
           const filterByCategory = response.filter(
             (item) => item.categoria === categoria
           );
-          console.log("filtrado por categoria");
-          console.log(filterByCategory);
           filterByCategory.length === 0
             ? navigate("/notFound")
             : setItems(filterByCategory);
@@ -38,8 +40,11 @@ const ItemListContainer = ({ slider }) => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-  }, [categoria, navigate]);
+  }, [categoria, navigate, setLoading]);
 
   // useEffect(() => {
   //   getItems()
@@ -83,18 +88,24 @@ const ItemListContainer = ({ slider }) => {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Typography
-          className="title-itemListContainer"
-          variant="h2"
-          align="center"
-          mt={2}
-          mb={4}
-        >
-          {assignamentTitle()}
-        </Typography>
-      </ThemeProvider>
-      <ItemList items={items} slider={slider} />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          <ThemeProvider theme={theme}>
+            <Typography
+              className="title-itemListContainer"
+              variant="h2"
+              align="center"
+              mt={2}
+              mb={4}
+            >
+              {assignamentTitle()}
+            </Typography>
+          </ThemeProvider>
+          <ItemList items={items} slider={slider} />
+        </>
+      )}
     </>
   );
 };

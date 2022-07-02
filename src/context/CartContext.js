@@ -3,14 +3,16 @@ import { createContext, useState } from "react";
 const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
+  const [loading, setLoading] = useState(false);
   const [cartListItems, setCartListItems] = useState([]);
+  // const [itemsPurchased, setItemsPurchased] = useState([]);
 
   const addItem = (item, quantity) => {
     console.log("item", item);
     const isInCart = cartListItems.some((i) => i.id === item.id);
     if (!isInCart) {
       const newItem = { item: item, quantity: quantity };
-      setCartListItems((cartListItems) => [...cartListItems, newItem]);
+      setCartListItems((oldState) => [...oldState, newItem]);
     } else {
       alert("Ya tienes este producto en tu carrito");
     }
@@ -24,7 +26,18 @@ const CartProvider = ({ children }) => {
     setCartListItems([]);
   };
 
-  const data = { cartListItems, addItem, removeItem, clear };
+  const data = {
+    loading,
+    setLoading,
+    cartListItems,
+    setCartListItems,
+    addItem,
+    removeItem,
+    clear,
+    // itemsPurchased,
+    // purchasedItem,
+    // setItemsPurchased,
+  };
 
   // eslint-disable-next-line react/react-in-jsx-scope
   return <CartContext.Provider value={data}>{children}</CartContext.Provider>;
