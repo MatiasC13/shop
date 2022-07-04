@@ -1,22 +1,22 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Grid, Typography, Button } from "@mui/material";
-import { CartContext } from "../../context/CartContext";
+// import { CartContext } from "../../context/CartContext";
 import ItemCount from "../ItemCount/ItemCount";
 import "./ItemDetail.css";
 
 const ItemDetail = ({ item }) => {
-  const { imagen, titulo, artista, discografica, anio, copias, precio } = item;
-  const { setCartListItems } = useContext(CartContext);
+  const { imagen, titulo, artista, discografica, anio, precio } = item;
+  // const { setCartListItems } = useContext(CartContext);
   const [count, setCount] = useState(1);
   const [onAdd, setOnAdd] = useState(false);
 
-  const handlerPurchased = () => {
-    const itemPurchased = { ...item, quantity: count };
-    console.log("hanfler purchased: ", itemPurchased);
-    // itemPurchased.quantity = count;
-    setCartListItems((oldList) => [...oldList, itemPurchased]);
-  };
+  // const handlerPurchased = () => {
+  //   const itemPurchased = { ...item, quantity: count };
+  //   console.log("hanfler purchased: ", itemPurchased);
+  //   // itemPurchased.quantity = count;
+  //   setCartListItems((oldList) => [...oldList, itemPurchased]);
+  // };
 
   return (
     <Box
@@ -61,7 +61,7 @@ const ItemDetail = ({ item }) => {
               setCount={setCount}
               setOnAdd={setOnAdd}
               item={item}
-              stock={copias}
+              // stock={copias}
               // initial={1}
             />
           ) : (
@@ -74,10 +74,10 @@ const ItemDetail = ({ item }) => {
             >
               <Link
                 to="/cart"
-                onClick={handlerPurchased}
+                // onClick={handlerPurchased}
                 className="item-detail-link"
               >
-                Comprar
+                Ir al Carrito
               </Link>
             </Button>
           )}

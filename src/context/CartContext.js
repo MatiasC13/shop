@@ -4,22 +4,22 @@ const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
+  const [discos, setDiscos] = useState([]);
   const [cartListItems, setCartListItems] = useState([]);
   // const [itemsPurchased, setItemsPurchased] = useState([]);
 
-  const addItem = (item, quantity) => {
-    console.log("item", item);
-    const isInCart = cartListItems.some((i) => i.id === item.id);
+  const addItem = (disc, quantity) => {
+    const isInCart = cartListItems.some(({ item: { id } }) => id === disc.id);
     if (!isInCart) {
-      const newItem = { item: item, quantity: quantity };
+      const newItem = { item: disc, quantity: quantity };
       setCartListItems((oldState) => [...oldState, newItem]);
     } else {
       alert("Ya tienes este producto en tu carrito");
     }
   };
 
-  const removeItem = (item) => {
-    setCartListItems(cartListItems.filter((i) => i.item.id !== item.item.id));
+  const removeItem = (id) => {
+    setCartListItems(cartListItems.filter((i) => i.item.id !== id));
   };
 
   const clear = () => {
@@ -29,6 +29,8 @@ const CartProvider = ({ children }) => {
   const data = {
     loading,
     setLoading,
+    discos,
+    setDiscos,
     cartListItems,
     setCartListItems,
     addItem,

@@ -1,26 +1,26 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Loader from "../Loader/Loader";
 import ItemList from "../ItemList/ItemList";
-import discos from "../../utils/discsMock";
+import getItems from "../../services/Request";
 import "./ItemListContainer.css";
 
 const ItemListContainer = ({ slider }) => {
   const navigate = useNavigate();
   const { categoria } = useParams();
-  const { loading, setLoading } = useContext(CartContext);
-  const [items, setItems] = useState([]);
+  const { loading, setLoading, discos, setDiscos } = useContext(CartContext);
+  // const [items, setItems] = useState([]);
 
-  const getItems = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(discos);
-      }, 2000);
-    });
-  };
+  // const getItems = () => {
+  //   return new Promise((resolve) => {
+  //     setTimeout(() => {
+  //       resolve(discos);
+  //     }, 2000);
+  //   });
+  // };
 
   useEffect(() => {
     setLoading(true);
@@ -32,10 +32,10 @@ const ItemListContainer = ({ slider }) => {
           );
           filterByCategory.length === 0
             ? navigate("/notFound")
-            : setItems(filterByCategory);
-          setItems(filterByCategory);
+            : setDiscos(filterByCategory);
+          setDiscos(filterByCategory);
         } else {
-          setItems(response);
+          setDiscos(response);
         }
       })
       .catch((error) => {
@@ -44,7 +44,7 @@ const ItemListContainer = ({ slider }) => {
       .finally(() => {
         setLoading(false);
       });
-  }, [categoria, navigate, setLoading]);
+  }, [categoria, navigate, setLoading, setDiscos]);
 
   // useEffect(() => {
   //   getItems()
@@ -103,7 +103,7 @@ const ItemListContainer = ({ slider }) => {
               {assignamentTitle()}
             </Typography>
           </ThemeProvider>
-          <ItemList items={items} slider={slider} />
+          <ItemList items={discos} slider={slider} />
         </>
       )}
     </>

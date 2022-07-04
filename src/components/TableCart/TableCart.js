@@ -1,3 +1,6 @@
+import { useContext } from "react";
+import { Link } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 import {
   Table,
   TableBody,
@@ -6,94 +9,102 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Typography,
+  Button,
 } from "@mui/material";
-import { useContext } from "react";
-import { CartContext } from "../../context/CartContext";
+import IconButton from "@mui/material/IconButton";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
 export default function TableCart() {
-  const { cartListItems } = useContext(CartContext);
+  const { cartListItems, removeItem, clear } = useContext(CartContext);
 
-  const rows = cartListItems.map((i) =>
-    createRow(
-      i.id,
-      i.imagem,
-      i.titulo,
-      i.artista,
-      i.discografica,
-      i.categoria,
-      i.anio,
-      i.copias,
-      i.precio
-    )
-  );
+  const rows = cartListItems.map((i) => createRow(i));
 
-  const TAX_RATE = 0.22;
-
-  function createRow(desc, qty, unit) {
-    const price = priceRow(qty, unit);
-    return { desc, qty, unit, price };
+  function createRow(order) {
+    const {
+      item: { id, imagen, titulo, artista, precio },
+      quantity,
+    } = order;
+    const priceRow = calculatePriceRow(precio, quantity);
+    return { precio, id, imagen, titulo, artista, quantity, priceRow };
   }
 
   function ccyFormat(num) {
     return `${num.toFixed(2)}`;
   }
 
-  function priceRow(qty, unit) {
+  function calculatePriceRow(qty, unit) {
     return qty * unit;
   }
 
-  function subtotal(items) {
-    return items.map(({ price }) => price).reduce((sum, i) => sum + i, 0);
+  function totalPrice(items) {
+    return items.map(({ priceRow }) => priceRow).reduce((sum, i) => sum + i, 0);
   }
-  const invoiceSubtotal = subtotal(rows);
-  const invoiceTaxes = TAX_RATE * invoiceSubtotal;
-  const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+
+  const invoiceTotal = totalPrice(rows);
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="spanning table">
-        <TableHead>
-          <TableRow>
-            <TableCell align="center" colSpan={3}>
-              Detalle
-            </TableCell>
-            <TableCell align="right">Precio</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Artista</TableCell>
-            <TableCell align="right">Cantidad</TableCell>
-            <TableCell align="right">Unidad</TableCell>
-            <TableCell align="right">Suma</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.desc}>
-              <TableCell>{row.desc}</TableCell>
-              <TableCell align="right">{row.qty}</TableCell>
-              <TableCell align="right">{row.unit}</TableCell>
-              <TableCell align="right">{ccyFormat(row.price)}</TableCell>
-            </TableRow>
-          ))}
+    <>
+      {cartListItems.length === 0 ? (
+        <Typography variant="caption" px={1}>
+          Tu carrito está vacío
+        </Typography>
+      ) : (
+        <>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="spanning table">
+              <TableHead>
+                <TableRow>
+                  <TableCell align="center" colSpan={3}>
+                    Detalle
+                  </TableCell>
+                  <TableCell align="right">Precio</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>Artista</TableCell>
+                  <TableCell align="right">Titulo</TableCell>
+                  <TableCell align="right">Cantidad</TableCell>
+                  <TableCell align="right">Precio Unit.</TableCell>
+                  <TableCell align="right">Total</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows.map(
+                  ({ precio, id, imagen, titulo, artista, priceRow }, i) => (
+                    <TableRow key={i}>
+                      <TableCell>
+                        <img alt="" src={`/img/${imagen}`}></img>
+                      </TableCell>
+                      <TableCell align="right">{titulo}</TableCell>
+                      <TableCell align="right">{artista}</TableCell>
+                      <TableCell align="right">{ccyFormat(precio)}</TableCell>
+                      <TableCell align="right">{ccyFormat(priceRow)}</TableCell>
+                      <TableCell align="right">
+                        <IconButton>
+                          <DeleteOutlineOutlinedIcon
+                            onClick={() => removeItem(id)}
+                          />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
 
-          <TableRow>
-            <TableCell rowSpan={3} />
-            <TableCell colSpan={2}>Subtotal</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceSubtotal)}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell>Tax</TableCell>
-            <TableCell align="right">{`${(TAX_RATE * 100).toFixed(
-              0
-            )} %`}</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTaxes)}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+                <TableRow>
+                  <TableCell rowSpan={3} />
+                </TableRow>
+
+                <TableRow>
+                  <TableCell colSpan={2}>Total</TableCell>
+                  <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button onClick={() => clear()}>Vaciar Carrito</Button>
+        </>
+      )}
+      <Link to="/">Ir a Home</Link>
+    </>
   );
 }

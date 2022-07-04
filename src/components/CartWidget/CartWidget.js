@@ -7,7 +7,6 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 
 const CartWidget = () => {
   const { cartListItems, removeItem, clear } = useContext(CartContext);
-  console.table(cartListItems);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -18,19 +17,13 @@ const CartWidget = () => {
     setAnchorEl(null);
   };
 
-  const quantityItems = () => {
-    let count = 0;
-    cartListItems.forEach((i) => {
-      count += i.quantity;
-    });
-    return count;
-  };
+  const quantityItems = cartListItems.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
     <>
       <IconButton>
         <Badge
-          badgeContent={quantityItems()}
+          badgeContent={quantityItems}
           showZero
           anchorOrigin={{
             vertical: "top",
@@ -61,25 +54,28 @@ const CartWidget = () => {
             Tu carrito está vacío
           </Typography>
         )}
-        {cartListItems.map((elemento, i) => (
-          <>
-            <MenuItem key={i} onClick={handleClose}>
-              <img src={`/img/${elemento.item.imagen}`} alt="" />
-              <Typography gutterBottom variant="caption">
-                {elemento.item.titulo}
-              </Typography>
-              <Typography gutterBottom variant="caption">
-                ${elemento.item.precio}
-              </Typography>
-              <IconButton>
-                <DeleteOutlineOutlinedIcon
-                  onClick={() => removeItem(elemento)}
-                />
-              </IconButton>
-            </MenuItem>
-            <Button onClick={() => clear()}>Vaciar Carrito</Button>
-          </>
-        ))}
+        {cartListItems.map(
+          ({ item: { imagen, titulo, id, precio }, quantity }, i) => (
+            <>
+              <MenuItem key={i} onClick={handleClose}>
+                <img src={`/img/${imagen}`} alt="" />
+                <Typography gutterBottom variant="caption">
+                  {titulo}
+                </Typography>
+                <Typography gutterBottom variant="caption">
+                  ${precio}
+                </Typography>
+                <Typography gutterBottom variant="caption">
+                  Cantidad: {quantity}
+                </Typography>
+                <IconButton>
+                  <DeleteOutlineOutlinedIcon onClick={() => removeItem(id)} />
+                </IconButton>
+              </MenuItem>
+              <Button onClick={() => clear()}>Vaciar Carrito</Button>
+            </>
+          )
+        )}
       </Menu>
     </>
   );
