@@ -1,9 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
 import { CartContext } from "../../context/CartContext";
+import db from "../../utils/firebaseConfig";
 import Loader from "../Loader/Loader";
 import ItemDetail from "../ItemDetail/ItemDetail";
-import getItem from "../../services/Request";
+// import getItem from "../../services/Request";
 
 const ItemDetailContainer = () => {
   const navigate = useNavigate();
@@ -20,12 +22,20 @@ const ItemDetailContainer = () => {
   // };
 
   useEffect(() => {
+    const getItem = async () => {
+      const docRef = doc(db, "discos", id);
+      const docSnaptshop = await getDoc(docRef);
+      let disc = docSnaptshop.data();
+      disc.id = docSnaptshop.id;
+      return disc;
+    };
+
     setLoading(true);
     getItem()
       .then((response) => {
-        // eslint-disable-next-line eqeqeq
-        const findById = response.find((d) => d.id == id);
-        findById === undefined ? navigate("/notFound") : setItem(findById);
+        // const findById = response.find((d) => d.id == id);
+        // findById === undefined ? navigate("/notFound") : setItem(findById);
+        response === undefined ? navigate("/notFound") : setItem(response);
       })
       .catch((error) => {
         console.log(error);
@@ -33,7 +43,7 @@ const ItemDetailContainer = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [navigate, id, setLoading]);
+  }, [navigate, setLoading, id]);
 
   // useEffect(() => {
   //   const findItem = discos.find((d) => {
