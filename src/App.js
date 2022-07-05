@@ -7,6 +7,7 @@ import Categories from "./pages/Categories";
 import Detail from "./pages/Detail";
 import Cart from "./pages/Cart";
 import NotFound from "./pages/NotFound";
+// import ModalCart from "./components/ModalCart/ModalCart";
 
 function App() {
   const darkTheme = createTheme({
@@ -20,6 +21,7 @@ function App() {
       <BrowserRouter>
         <ThemeProvider theme={darkTheme}>
           <NavBar />
+          {/* <ModalCart /> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/categorias/:categoria" element={<Categories />} />

@@ -3,12 +3,12 @@ import { Button, Typography } from "@mui/material";
 import { CartContext } from "../../context/CartContext";
 import "./ItemCount.css";
 
-const ItemCount = ({ item, count, setCount, setOnAdd }) => {
+const ItemCount = ({ item, count, setCount, showButton }) => {
   const { addItem } = useContext(CartContext);
 
   const handlerAdd = (item, quantity) => {
     addItem(item, quantity);
-    setOnAdd(true);
+    showButton(false);
   };
 
   // const onAdd = () => {

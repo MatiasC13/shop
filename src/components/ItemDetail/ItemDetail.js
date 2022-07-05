@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../../context/CartContext";
 import { Box, Grid, Typography, Button } from "@mui/material";
 // import { CartContext } from "../../context/CartContext";
 import ItemCount from "../ItemCount/ItemCount";
@@ -7,9 +8,13 @@ import "./ItemDetail.css";
 
 const ItemDetail = ({ item }) => {
   const { imagen, titulo, artista, discografica, anio, precio } = item;
-  // const { setCartListItems } = useContext(CartContext);
+  const { cartListItems } = useContext(CartContext);
   const [count, setCount] = useState(1);
-  const [onAdd, setOnAdd] = useState(false);
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    setShowButton(true);
+  }, []);
 
   // const handlerPurchased = () => {
   //   const itemPurchased = { ...item, quantity: count };
@@ -55,18 +60,9 @@ const ItemDetail = ({ item }) => {
               </Typography>
             </Box>
           </Box>
-          {!onAdd ? (
-            <ItemCount
-              count={count}
-              setCount={setCount}
-              setOnAdd={setOnAdd}
-              item={item}
-              // stock={copias}
-              // initial={1}
-            />
-          ) : (
+          {!showButton || cartListItems.length > 0 ? (
             <Button
-              // onClick={setOnAdd}
+              // onClick={setShowButton}
               variant="outlined"
               color="inherit"
               size="large"
@@ -80,6 +76,15 @@ const ItemDetail = ({ item }) => {
                 Ir al Carrito
               </Link>
             </Button>
+          ) : (
+            <ItemCount
+              count={count}
+              setCount={setCount}
+              setShowButton={setShowButton}
+              item={item}
+              // stock={copias}
+              // initial={1}
+            />
           )}
         </Grid>
       </Grid>
