@@ -15,7 +15,8 @@ import {
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-export default function TableCart() {
+export default function TableCart({ setIsOpen }) {
+  console.log(setIsOpen);
   const { cartListItems, removeItem, clear } = useContext(CartContext);
 
   const rows = cartListItems.map((i) => createRow(i));
@@ -42,6 +43,11 @@ export default function TableCart() {
   }
 
   const invoiceTotal = totalPrice(rows);
+  // const invoiceTotal = totalPrice;
+
+  const handleClickOpen = () => {
+    setIsOpen(true);
+  };
 
   return (
     <>
@@ -102,6 +108,9 @@ export default function TableCart() {
             </Table>
           </TableContainer>
           <Button onClick={() => clear()}>Vaciar Carrito</Button>
+          <Button variant="outlined" onClick={() => handleClickOpen(true)}>
+            Finalizar Compra
+          </Button>
         </>
       )}
       <Link to="/">Ir a Home</Link>

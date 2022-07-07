@@ -6,6 +6,7 @@ const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [discos, setDiscos] = useState([]);
   const [cartListItems, setCartListItems] = useState([]);
+  const [purchasedMode, setPurchasedMode] = useState(false);
   // const [itemsPurchased, setItemsPurchased] = useState([]);
 
   const addItem = (disc, quantity) => {
@@ -13,6 +14,7 @@ const CartProvider = ({ children }) => {
     if (!isInCart) {
       const newItem = { item: disc, quantity: quantity };
       setCartListItems((oldState) => [...oldState, newItem]);
+      setPurchasedMode(true);
     } else {
       alert("Ya tienes este producto en tu carrito");
     }
@@ -20,10 +22,14 @@ const CartProvider = ({ children }) => {
 
   const removeItem = (id) => {
     setCartListItems(cartListItems.filter((i) => i.item.id !== id));
+    if ((cartListItems.length = 1)) {
+      setPurchasedMode(false);
+    }
   };
 
   const clear = () => {
     setCartListItems([]);
+    setPurchasedMode(false);
   };
 
   const data = {
@@ -36,6 +42,8 @@ const CartProvider = ({ children }) => {
     addItem,
     removeItem,
     clear,
+    purchasedMode,
+    setPurchasedMode,
     // itemsPurchased,
     // purchasedItem,
     // setItemsPurchased,
@@ -45,5 +53,6 @@ const CartProvider = ({ children }) => {
   return <CartContext.Provider value={data}>{children}</CartContext.Provider>;
 };
 
+// const useCartList = useContext()
 export { CartContext };
 export default CartProvider;

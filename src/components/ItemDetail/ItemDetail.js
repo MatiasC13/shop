@@ -8,13 +8,15 @@ import "./ItemDetail.css";
 
 const ItemDetail = ({ item }) => {
   const { imagen, titulo, artista, discografica, anio, precio } = item;
-  const { cartListItems } = useContext(CartContext);
+  const { purchasedMode, setPurchasedMode } = useContext(CartContext);
   const [count, setCount] = useState(1);
-  const [showButton, setShowButton] = useState(false);
+  // const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
-    setShowButton(true);
-  }, []);
+    return function () {
+      setPurchasedMode(false);
+    };
+  }, [setPurchasedMode]);
 
   // const handlerPurchased = () => {
   //   const itemPurchased = { ...item, quantity: count };
@@ -60,7 +62,7 @@ const ItemDetail = ({ item }) => {
               </Typography>
             </Box>
           </Box>
-          {!showButton || cartListItems.length > 0 ? (
+          {purchasedMode ? (
             <Button
               // onClick={setShowButton}
               variant="outlined"
@@ -80,7 +82,7 @@ const ItemDetail = ({ item }) => {
             <ItemCount
               count={count}
               setCount={setCount}
-              setShowButton={setShowButton}
+              // setShowButton={setShowButton}
               item={item}
               // stock={copias}
               // initial={1}

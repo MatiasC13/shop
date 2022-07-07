@@ -1,13 +1,11 @@
 import { useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
 import { CartContext } from "../../context/CartContext";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Loader from "../Loader/Loader";
 import ItemList from "../ItemList/ItemList";
-import db from "../../utils/firebaseConfig";
-// import getItems from "../../services/Request";
+import { getItems } from "../../firebase/services";
 import "./ItemListContainer.css";
 
 const ItemListContainer = ({ slider }) => {
@@ -16,15 +14,6 @@ const ItemListContainer = ({ slider }) => {
   const { loading, setLoading, discos, setDiscos } = useContext(CartContext);
   // const [items, setItems] = useState([]);
 
-  const getItems = async () => {
-    const discsSnapshot = await getDocs(collection(db, "discos"));
-    const discList = discsSnapshot.docs.map((d) => {
-      let disc = d.data();
-      disc.id = d.id;
-      return disc;
-    });
-    return discList;
-  };
   // const getItems = () => {
   //   return new Promise((resolve) => {
   //     setTimeout(() => {
