@@ -1,12 +1,12 @@
-import { useContext, useState } from "react";
-import { CartContext } from "../../context/CartContext";
+import { useState } from "react";
 import { Badge, Menu, MenuItem, Typography, Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import useCartList from "../../customHooks/useCartList";
 
 const CartWidget = () => {
-  const { cartListItems, removeItem, clear } = useContext(CartContext);
+  const { cartListItems, removeItem, clear } = useCartList();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -17,27 +17,27 @@ const CartWidget = () => {
     setAnchorEl(null);
   };
 
-  const quantityItems = cartListItems.reduce((sum, i) => sum + i.quantity, 0);
+  const quantityItems = () =>
+    cartListItems.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <>
-      <IconButton>
+    <div>
+      <IconButton
+        id="basic-button"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        onClick={handleClick}
+      >
         <Badge
-          badgeContent={quantityItems}
+          badgeContent={quantityItems()}
           showZero
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
           }}
         >
-          <LocalGroceryStoreOutlinedIcon
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-            fontSize="large"
-          />
+          <LocalGroceryStoreOutlinedIcon fontSize="large" />
         </Badge>
       </IconButton>
       <Menu
@@ -56,8 +56,8 @@ const CartWidget = () => {
         )}
         {cartListItems.map(
           ({ item: { imagen, titulo, id, precio }, quantity }, i) => (
-            <>
-              <MenuItem key={i} onClick={handleClose}>
+            <div key={i}>
+              <MenuItem onClick={handleClose}>
                 <img src={`/img/${imagen}`} alt="" />
                 <Typography gutterBottom variant="caption">
                   {titulo}
@@ -68,16 +68,16 @@ const CartWidget = () => {
                 <Typography gutterBottom variant="caption">
                   Cantidad: {quantity}
                 </Typography>
-                <IconButton>
-                  <DeleteOutlineOutlinedIcon onClick={() => removeItem(id)} />
+                <IconButton onClick={() => removeItem(id)}>
+                  <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </MenuItem>
               <Button onClick={() => clear()}>Vaciar Carrito</Button>
-            </>
+            </div>
           )
         )}
       </Menu>
-    </>
+    </div>
   );
 };
 

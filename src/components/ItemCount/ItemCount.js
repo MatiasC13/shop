@@ -1,18 +1,14 @@
-import { useContext } from "react";
 import { Button, Typography } from "@mui/material";
-import { CartContext } from "../../context/CartContext";
+
 import "./ItemCount.css";
+import useCartList from "../../customHooks/useCartList";
 
 const ItemCount = ({ item, count, setCount }) => {
-  const { addItem } = useContext(CartContext);
+  const { addItem } = useCartList();
 
   const handlerAdd = (item, quantity) => {
     addItem(item, quantity);
   };
-
-  // const onAdd = () => {
-  //   console.log(`${count} disco/s agregado/s.`);
-  // };
 
   return (
     <div className="flex">

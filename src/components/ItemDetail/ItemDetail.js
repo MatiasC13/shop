@@ -1,29 +1,25 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
+import useCartList from "../../customHooks/useCartList";
 import { Link } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
 import { Box, Grid, Typography, Button } from "@mui/material";
-// import { CartContext } from "../../context/CartContext";
+
 import ItemCount from "../ItemCount/ItemCount";
 import "./ItemDetail.css";
 
 const ItemDetail = ({ item }) => {
-  const { imagen, titulo, artista, discografica, anio, precio } = item;
-  const { purchasedMode, setPurchasedMode } = useContext(CartContext);
+  const { id, imagen, titulo, artista, discografica, anio, precio } = item;
+
+  const { containElement } = useCartList();
   const [count, setCount] = useState(1);
-  // const [showButton, setShowButton] = useState(false);
+  const [readyForPuchase, setReadyForPurchase] = useState(false);
 
   useEffect(() => {
-    return function () {
-      setPurchasedMode(false);
-    };
-  }, [setPurchasedMode]);
-
-  // const handlerPurchased = () => {
-  //   const itemPurchased = { ...item, quantity: count };
-  //   console.log("hanfler purchased: ", itemPurchased);
-  //   // itemPurchased.quantity = count;
-  //   setCartListItems((oldList) => [...oldList, itemPurchased]);
-  // };
+    if (containElement(id)) {
+      setReadyForPurchase(true);
+    } else {
+      setReadyForPurchase(false);
+    }
+  }, [containElement, id]);
 
   return (
     <Box
@@ -62,9 +58,8 @@ const ItemDetail = ({ item }) => {
               </Typography>
             </Box>
           </Box>
-          {purchasedMode ? (
+          {readyForPuchase ? (
             <Button
-              // onClick={setShowButton}
               variant="outlined"
               color="inherit"
               size="large"

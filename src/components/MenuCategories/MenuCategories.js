@@ -19,7 +19,7 @@ const MenuCategories = () => {
   const categories = ["LP", "EP"];
 
   return (
-    <>
+    <div>
       <Button
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
@@ -54,7 +54,7 @@ const MenuCategories = () => {
           );
         })}
       </Menu>
-    </>
+    </div>
   );
 };
 

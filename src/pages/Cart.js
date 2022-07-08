@@ -1,13 +1,14 @@
-import { useState } from "react";
+import useModal from "../customHooks/useModal";
 import TableCart from "../components/TableCart/TableCart";
 import ModalCart from "../components/ModalCart/ModalCart";
 
 const Cart = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, openModal, close] = useModal(false);
   return (
     <>
-      <TableCart setIsOpen={setIsOpen} />
-      {isOpen && <ModalCart open={isOpen} setIsOpen={setIsOpen} />}
+      <TableCart openModal={openModal} />
+      <ModalCart open={isOpen} close={close} />
+      {/* modal de exito */}
     </>
   );
 };

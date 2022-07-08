@@ -1,6 +1,5 @@
-import { useContext } from "react";
+import useCartList from "../../customHooks/useCartList";
 import { Link } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
 import {
   Table,
   TableBody,
@@ -15,9 +14,8 @@ import {
 import IconButton from "@mui/material/IconButton";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 
-export default function TableCart({ setIsOpen }) {
-  console.log(setIsOpen);
-  const { cartListItems, removeItem, clear } = useContext(CartContext);
+export default function TableCart({ openModal }) {
+  const { cartListItems, removeItem, clear } = useCartList();
 
   const rows = cartListItems.map((i) => createRow(i));
 
@@ -44,10 +42,6 @@ export default function TableCart({ setIsOpen }) {
 
   const invoiceTotal = totalPrice(rows);
   // const invoiceTotal = totalPrice;
-
-  const handleClickOpen = () => {
-    setIsOpen(true);
-  };
 
   return (
     <>
@@ -86,10 +80,8 @@ export default function TableCart({ setIsOpen }) {
                       <TableCell align="right">{ccyFormat(precio)}</TableCell>
                       <TableCell align="right">{ccyFormat(priceRow)}</TableCell>
                       <TableCell align="right">
-                        <IconButton>
-                          <DeleteOutlineOutlinedIcon
-                            onClick={() => removeItem(id)}
-                          />
+                        <IconButton onClick={() => removeItem(id)}>
+                          <DeleteOutlineOutlinedIcon />
                         </IconButton>
                       </TableCell>
                     </TableRow>
@@ -108,7 +100,7 @@ export default function TableCart({ setIsOpen }) {
             </Table>
           </TableContainer>
           <Button onClick={() => clear()}>Vaciar Carrito</Button>
-          <Button variant="outlined" onClick={() => handleClickOpen(true)}>
+          <Button variant="outlined" onClick={openModal}>
             Finalizar Compra
           </Button>
         </>

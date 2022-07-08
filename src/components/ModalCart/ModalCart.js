@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CartContext } from "../../context/CartContext";
+
 import {
   Box,
   Button,
@@ -11,41 +11,24 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { saveData } from "../../firebase/services";
-import useCartList from "../../customHooks/hookCartList";
-import { clear } from "@testing-library/user-event/dist/clear";
+import useCartList from "../../customHooks/useCartList";
 
-const ModalCart = ({ isOpen, setIsOpen }) => {
-  console.log("isOpen", isOpen);
+const initialState = {
+  name: "",
+  phone: "",
+  email: "",
+};
+const ModalCart = ({ isOpen, close }) => {
   const navigate = useNavigate();
-  const { cartListItems, totalPrice } = useCartList();
-  const [formValue, setFormValue] = useState({
-    name: "",
-    phone: "",
-    email: "",
-  });
-  // const [order, setOrder] = useState({
-  //   buyer: {},
-  //   items: cartListItems.map((item) => {
-  //     return {
-  //       id: item.id,
-  //       titulo: item.titulo,
-  //       precio: item.precio,
-  //       //quantity
-  //     };
-  //   }),
-  //   total: totalPrice,
-  // });
-  const [succesOrder, setSuccesOrder] = useState(1);
+  const { cartListItems, totalPrice, setCartListItems } = useCartList();
+
+  const [formValue, setFormValue] = useState(initialState);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen) {
       setFormValue({});
     }
   }, [isOpen]);
-
-  const handleClose = () => {
-    setIsOpen(false);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,7 +42,9 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
       })
     );
     saveData({ items, buyer: formValue, totalPrice });
-    clear();
+    close();
+    navigate("/");
+    setCartListItems([]);
     //   saveData({ ...order, buyer: formValue });
   };
 
@@ -67,9 +52,9 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
 
-  const finishOrder = () => {
-    navigate("/");
-  };
+  // const finishOrder = () => {
+  //   navigate("/");
+  // };
 
   // const saveData = async (newOrder) => {
   //   const orderFirebase = collection(db, "ordenes");
@@ -80,13 +65,14 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
 
   return (
     <>
-      <Dialog isOpen={isOpen} onClose={handleClose}>
+      <Dialog isOpen={isOpen} onClose={close}>
         <Box component="form" onSubmit={handleSubmit}>
           {/* <form onSubmit={handleSubmit}> */}
           <DialogTitle>Completa tus datos</DialogTitle>
           <DialogContent>
             <TextField
               required
+              autoComplete="off"
               name="name"
               id="standard-required"
               label="Nombre y Apellido"
@@ -99,6 +85,7 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
           <DialogContent>
             <TextField
               required
+              autoComplete="off"
               name="phone"
               id="standard-required"
               label="Teléfono"
@@ -111,6 +98,7 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
           <DialogContent>
             <TextField
               required
+              autoComplete="off"
               name="email"
               id="standard-required"
               label="E-Mail"
@@ -121,7 +109,7 @@ const ModalCart = ({ isOpen, setIsOpen }) => {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancelar</Button>
+            <Button onClick={close}>Cancelar</Button>
             <Button type="submit" onSubmit={handleSubmit}>
               Enviar
             </Button>
