@@ -59,20 +59,36 @@ const ItemDetail = ({ item }) => {
             </Box>
           </Box>
           {readyForPuchase ? (
-            <Button
-              variant="outlined"
-              color="inherit"
-              size="large"
-              className="item-detail-button"
-            >
-              <Link
-                to="/cart"
-                // onClick={handlerPurchased}
-                className="item-detail-link"
+            <>
+              <Button
+                variant="outlined"
+                color="inherit"
+                size="large"
+                className="item-detail-button"
               >
-                Ir al Carrito
-              </Link>
-            </Button>
+                <Link
+                  to="/"
+                  // onClick={handlerPurchased}
+                  className="item-detail-link"
+                >
+                  Continuar Comprando
+                </Link>
+              </Button>
+              <Button
+                variant="outlined"
+                color="inherit"
+                size="large"
+                className="item-detail-button"
+              >
+                <Link
+                  to="/cart"
+                  // onClick={handlerPurchased}
+                  className="item-detail-link"
+                >
+                  Ir al Carrito
+                </Link>
+              </Button>
+            </>
           ) : (
             <ItemCount
               count={count}

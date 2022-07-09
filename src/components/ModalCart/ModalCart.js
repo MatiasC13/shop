@@ -44,9 +44,13 @@ const ModalCart = ({ open, close, openModalAprove, setOrder }) => {
       })
     );
 
-    saveData({ items, buyer: formData, totalPrice }).then((o) => {
-      setOrder(o.id);
-    });
+    saveData({ items, buyer: formData, date: new Date(), totalPrice }).then(
+      (o) => {
+        setOrder(o.id);
+      }
+    );
+    localStorage.removeItem("items");
+    localStorage.setItem("items", JSON.stringify([]));
     close();
     openModalAprove();
   };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Badge, Menu, MenuItem, Typography, Button } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
@@ -6,7 +7,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import useCartList from "../../customHooks/useCartList";
 
 const CartWidget = () => {
-  const { cartListItems, removeItem, clear } = useCartList();
+  const { cartListItems, removeItem } = useCartList();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -72,10 +73,12 @@ const CartWidget = () => {
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </MenuItem>
-              <Button onClick={() => clear()}>Vaciar Carrito</Button>
             </div>
           )
         )}
+        <Button>
+          <Link to="/cart">Ver Carrito</Link>
+        </Button>
       </Menu>
     </div>
   );

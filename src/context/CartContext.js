@@ -5,7 +5,9 @@ const CartContext = createContext();
 const CartProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [discos, setDiscos] = useState([]);
-  const [cartListItems, setCartListItems] = useState([]);
+  const [cartListItems, setCartListItems] = useState(
+    JSON.parse(localStorage.getItem("items")) || []
+  );
   // const [purchasedMode, setPurchasedMode] = useState(false);
   // const [itemsPurchased, setItemsPurchased] = useState([]);
 
