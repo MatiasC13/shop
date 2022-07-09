@@ -1,8 +1,8 @@
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { doc, getDoc } from "firebase/firestore";
-import { firebaseCollections } from "./helper";
+import { firebaseCollections } from "./helper/firebase_collections";
 import db from "./firebaseConfig";
-const { orders, discos } = firebaseCollections;
+const { ordenes, discos } = firebaseCollections;
 
 export const getItems = async () => {
   const discsSnapshot = await getDocs(collection(db, discos));
@@ -25,7 +25,7 @@ export const getItem = async (id) => {
 
 export async function saveData(order) {
   try {
-    const orderRef = collection(db, orders);
+    const orderRef = collection(db, ordenes);
     const res = await addDoc(orderRef, order);
     return res;
   } catch (e) {

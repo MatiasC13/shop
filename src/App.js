@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import routes from "./helper/helper";
+import routes from "./helper/rutas";
 import CartProvider from "./context/CartContext";
 import NavBar from "./components/NavBar/NavBar";
 import { Home, Categories, Detail, Cart, NotFound } from "./pages";

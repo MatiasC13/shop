@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import validationForm from "../../validations/formvalidation";
 import {
   Box,
   Button,
@@ -9,30 +9,32 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Alert,
 } from "@mui/material";
 import { saveData } from "../../firebase/services";
 import useCartList from "../../customHooks/useCartList";
+// const initalState = {
+//   name: "",
+//   phone: "",
+//   email: "",
+// };
 
-const initialState = {
-  name: "",
-  phone: "",
-  email: "",
-};
-const ModalCart = ({ isOpen, close }) => {
-  const navigate = useNavigate();
-  const { cartListItems, totalPrice, setCartListItems } = useCartList();
+const ModalCart = ({ open, close, openModalAprove, setOrder }) => {
+  console.log("openModalAprove", openModalAprove);
+  const { cartListItems, totalPrice } = useCartList();
 
-  const [formValue, setFormValue] = useState(initialState);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, dirtyFields },
+    reset,
+  } = useForm({ resolver: validationForm });
 
-  useEffect(() => {
-    if (isOpen) {
-      setFormValue({});
-    }
-  }, [isOpen]);
+  const isDirty = !!Object.keys(dirtyFields).length;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // setOrder({ cartListItems, buyer: formValue });
+  const onSubmit = (formData) => {
+    if (!isDirty) return;
+
     const items = cartListItems.map(
       ({ item: { id, titulo, precio }, quantity }) => ({
         id,
@@ -41,76 +43,85 @@ const ModalCart = ({ isOpen, close }) => {
         quantity,
       })
     );
-    saveData({ items, buyer: formValue, totalPrice });
+
+    saveData({ items, buyer: formData, totalPrice }).then((o) => {
+      setOrder(o.id);
+    });
     close();
-    navigate("/");
-    setCartListItems([]);
-    //   saveData({ ...order, buyer: formValue });
+    openModalAprove();
   };
 
-  const handleChange = (e) => {
-    setFormValue({ ...formValue, [e.target.name]: e.target.value });
-  };
-
-  // const finishOrder = () => {
-  //   navigate("/");
-  // };
-
-  // const saveData = async (newOrder) => {
-  //   const orderFirebase = collection(db, "ordenes");
-  //   const orderDoc = await addDoc(orderFirebase, newOrder);
-  //   setSuccesOrder(orderDoc.id);
-  //   clear();
-  // };
+  useEffect(() => {
+    if (!open) {
+      reset();
+    }
+  }, [open, reset]);
 
   return (
     <>
-      <Dialog isOpen={isOpen} onClose={close}>
-        <Box component="form" onSubmit={handleSubmit}>
+      <Dialog open={open} onClose={close}>
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
           {/* <form onSubmit={handleSubmit}> */}
           <DialogTitle>Completa tus datos</DialogTitle>
           <DialogContent>
             <TextField
-              required
+              // required
               autoComplete="off"
               name="name"
               id="standard-required"
               label="Nombre y Apellido"
-              variant="standard"
               type="text"
-              value={formValue.name}
-              onChange={handleChange}
+              variant="standard"
+              {...register("name")}
             />
+            {errors?.name && (
+              <Alert outlined="danger" severity="error">
+                {errors.name.message}
+              </Alert>
+            )}
           </DialogContent>
           <DialogContent>
             <TextField
-              required
+              // required
               autoComplete="off"
               name="phone"
               id="standard-required"
               label="Teléfono"
               variant="standard"
               type="tel"
-              value={formValue.phone}
-              onChange={handleChange}
+              placeholder="ej.: 00 598 097097789"
+              {...register("phone")}
             />
+            {errors?.phone && (
+              <Alert outlined="danger" severity="error">
+                {errors.phone.message}
+              </Alert>
+            )}
           </DialogContent>
           <DialogContent>
             <TextField
-              required
+              // required
               autoComplete="off"
               name="email"
               id="standard-required"
               label="E-Mail"
               variant="standard"
               type="email"
-              value={formValue.email}
-              onChange={handleChange}
+              {...register("email")}
             />
+            {errors?.email && (
+              <Alert outlined="danger" severity="error">
+                {errors.email.message}
+              </Alert>
+            )}
           </DialogContent>
           <DialogActions>
             <Button onClick={close}>Cancelar</Button>
-            <Button type="submit" onSubmit={handleSubmit}>
+            <Button
+              type="submit"
+              onSubmit={handleSubmit(onSubmit)}
+              disabled={!isDirty}
+            >
               Enviar
             </Button>
           </DialogActions>
@@ -122,3 +133,42 @@ const ModalCart = ({ isOpen, close }) => {
 };
 
 export default ModalCart;
+
+// useEffect(() => {
+//   if (isOpen) {
+//     setFormValue({});
+//   }
+// }, [isOpen]);
+
+// const handleSubmit = (e) => {
+//   e.preventDefault();
+//   // setOrder({ cartListItems, buyer: formValue });
+//   const items = cartListItems.map(
+//     ({ item: { id, titulo, precio }, quantity }) => ({
+//       id,
+//       titulo,
+//       precio,
+//       quantity,
+//     })
+//   );
+//   saveData({ items, buyer: formValue, totalPrice });
+//   close();
+//   navigate("/");
+//   setCartListItems([]);
+//   //   saveData({ ...order, buyer: formValue });
+// };
+
+// const handleChange = (e) => {
+//   setFormValue({ ...formValue, [e.target.name]: e.target.value });
+// };
+
+// const finishOrder = () => {
+//   navigate("/");
+// };
+
+// const saveData = async (newOrder) => {
+//   const orderFirebase = collection(db, "ordenes");
+//   const orderDoc = await addDoc(orderFirebase, newOrder);
+//   setSuccesOrder(orderDoc.id);
+//   clear();
+// };

@@ -41,7 +41,6 @@ export default function TableCart({ openModal }) {
   }
 
   const invoiceTotal = totalPrice(rows);
-  // const invoiceTotal = totalPrice;
 
   return (
     <>
