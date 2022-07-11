@@ -20,7 +20,7 @@ import useCartList from "../../customHooks/useCartList";
 // };
 
 const ModalCart = ({ open, close, openModalAprove, setOrder }) => {
-  console.log("openModalAprove", openModalAprove);
+  // console.log("openModalAprove", openModalAprove);
   const { cartListItems, totalPrice } = useCartList();
 
   const {
