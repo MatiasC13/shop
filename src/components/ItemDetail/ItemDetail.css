@@ -16,8 +16,13 @@
   justify-content: space-between;
 }
 
+.item-detail-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .item-detail-button {
-  width: 100%;
+  width: 45%;
 }
 
 .item-detail-link {

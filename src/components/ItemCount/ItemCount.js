@@ -4,7 +4,6 @@ import "./ItemCount.css";
 import useCartList from "../../customHooks/useCartList";
 
 const ItemCount = ({ item, count, setCount }) => {
-  console.log("Item Count", item);
   const { addItem } = useCartList();
 
   const handlerAdd = (item, quantity) => {

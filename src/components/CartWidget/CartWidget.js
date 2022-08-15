@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Badge, Menu, MenuItem, Typography, Button } from "@mui/material";
+import { Badge, Menu, MenuItem, Typography, Button, Box } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import LocalGroceryStoreOutlinedIcon from "@mui/icons-material/LocalGroceryStoreOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import useCartList from "../../customHooks/useCartList";
+import "./CartWidget.css";
 
 const CartWidget = () => {
   const { cartListItems, removeItem } = useCartList();
@@ -22,7 +23,7 @@ const CartWidget = () => {
     cartListItems.reduce((sum, i) => sum + i.quantity, 0);
 
   return (
-    <div>
+    <Box>
       <IconButton
         id="basic-button"
         aria-controls={open ? "basic-menu" : undefined}
@@ -57,7 +58,7 @@ const CartWidget = () => {
         )}
         {cartListItems.map(
           ({ item: { imagen, titulo, id, precio }, quantity }, i) => (
-            <div key={i}>
+            <Box key={i} className="box-menu-item">
               <MenuItem onClick={handleClose}>
                 <img src={`/img/${imagen}`} alt="" />
                 <Typography gutterBottom variant="caption">
@@ -73,14 +74,16 @@ const CartWidget = () => {
                   <DeleteOutlineOutlinedIcon />
                 </IconButton>
               </MenuItem>
-            </div>
+              <Button>
+                <Link to="/cart" className="button-link">
+                  Ver Carrito
+                </Link>
+              </Button>
+            </Box>
           )
         )}
-        <Button>
-          <Link to="/cart">Ver Carrito</Link>
-        </Button>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

@@ -59,7 +59,7 @@ const ItemDetail = ({ item }) => {
             </Box>
           </Box>
           {readyForPuchase ? (
-            <>
+            <Box className="item-detail-buttons">
               <Button
                 variant="outlined"
                 color="inherit"
@@ -88,7 +88,7 @@ const ItemDetail = ({ item }) => {
                   Ir al Carrito
                 </Link>
               </Button>
-            </>
+            </Box>
           ) : (
             <ItemCount
               count={count}
